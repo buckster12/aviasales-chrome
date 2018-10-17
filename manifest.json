@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "Aviasales checker",
+  "version": "0.1",
+  "icons": {
+    "16": "48x48.png",
+    "32": "48x48.png",
+    "48": "48x48.png",
+    "128": "48x48.png"
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "contextMenus",
+    "storage",
+    "bookmarks",
+    "alarms"
+  ],
+  "browser_action": {
+    "default_title": "Открыть aviasales checker",
+    "default_icon": "48x48.png",
+    "default_popup": "popup.html"
+  }
+}
