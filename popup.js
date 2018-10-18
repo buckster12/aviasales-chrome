@@ -1,20 +1,14 @@
 $(document).ready(function () {
 
-    chrome.alarms.onAlarm.addListener(onAlarm);
-
-    function onAlarm() {
-        var dateFrom = '0802';
-        var dateTo = '2102';
-        var from = "MOW";
-        var to = "CMB";
-
-        var action_url = "https://www.aviasales.ru/search/"+from+dateFrom+to+dateTo+"1";
-        chrome.tabs.create({ url: action_url });
-    }
+    // chrome.alarms.onAlarm.addListener(onAlarm);
 
     $('#buttonTest').on('click', function () {
 
-        // chrome.tabs.create('sdfdsf');
+
+        // chrome.alarms.create('checkNewTasks', {
+            // when: 1000,
+            // periodInMinutes: 1
+        // });
 
         var dateFrom = '0802';
         var dateTo = '2102';
@@ -23,28 +17,30 @@ $(document).ready(function () {
 
         var action_url = "https://www.aviasales.ru/search/"+from+dateFrom+to+dateTo+"1";
         chrome.tabs.create({ url: action_url });
+    });
 
-        // var openedWindow = window.open('https://www.aviasales.ru/search/MOW0802CMB19021', '_blank');
-        // if (openedWindow) {
-        //     Browser has allowed it to be opened
-            // openedWindow.focus();
-        // } else {
-        //     Browser has blocked it
-            // alert('Please allow popups for this website');
-        // }
+    $('#saveSettings').on('click', function () {
+        var duration = $('#durationInput').val();
 
+        chrome.storage.local.set({duration: duration}, function() {
+            $('#result').html('<span>saved</span>');
+            setTimeout(function () {
+                $('#result').find("span").fadeOut('slow')
+            }, 200);
+
+            // console.log('Value is set to ' + duration);
+        });
     });
 
 });
 
-// function checkNewTasks() {
-//     'use strict';
-//     console.log('started');
-//     var action_url = "https://www.aviasales.ru/search/"+from+dateFrom+to+dateTo+"1";
-//     chrome.tabs.create({ url: action_url });
-// }
+// chrome.storage.local.set({key: value}, function() {
+//     console.log('Value is set to ' + value);
+// });
 
-chrome.alarms.create('checkNewTasks', {
-    // when: 1000,
-    periodInMinutes: 1
+chrome.storage.local.get(['duration'], function(result) {
+    console.log('Value currently is ' + result.key);
 });
+
+// Run alarm every minute
+// chrome.alarms.create('checkNewTasks', { periodInMinutes: 5 });

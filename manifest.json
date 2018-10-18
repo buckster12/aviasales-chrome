@@ -1,7 +1,12 @@
 {
   "manifest_version": 2,
   "name": "Aviasales checker",
+  "description": "This extension is need to help us to find the cheapest flies over the world via site aviasales.ru",
   "version": "0.1",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "icons": {
     "16": "48x48.png",
     "32": "48x48.png",
@@ -10,10 +15,10 @@
   },
   "permissions": [
     "tabs",
-    "activeTab",
-    "contextMenus",
+//    "activeTab",
+//    "contextMenus",
     "storage",
-    "bookmarks",
+//    "bookmarks",
     "alarms"
   ],
   "browser_action": {
