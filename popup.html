@@ -7,22 +7,32 @@
     <title></title>
     <link rel="stylesheet" href="bootstrap.min.css">
     <script src="bootstrap.min.js"></script>
+    <script src="plugins/bootstrap-datepicker.js"></script>
+    <link rel="stylesheet" href="plugins/bootstrap-datepicker.css">
 </head>
 <body>
 
-From: <select name="" id="from">
-    <!-- TODO get airports -->
+<input type="checkbox" id="enableExtension"> enable extension
+<br>
+<br>
+
+<div id="airport_from"></div>
+
+
+From: <select name="airport_from" id="from">
     <option value="MOW">Moscow</option>
 </select>
-
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-
 To: <select name="" id="to">
     <option value="CMB">Colombo</option>
 </select>
+
+
+<br>
+
+From: <input type="text" id="dateFrom" size="10" class="datepicker">
+To:&nbsp;<input type="text" id="dateTo" size="10" class="datepicker">
+
+<br>
 
 <br>
 <br>
@@ -34,9 +44,15 @@ Stay for:
 
 <span id="saveSettings" class="btn btn-info">save</span>
 
+<br>
+
+<span id="getValue" class="btn btn-info">get</span>
+
 <div id="result"></div>
 
 <!--<span id="buttonTest" class="btn btn-primary">open aviasales</span>-->
+
+<textarea name="" id="log" cols="30" rows="10"></textarea>
 
 <br>
 <br>
