@@ -1,6 +1,7 @@
 body {
-    width: 450px;
+    width: 400px;
     padding: 5px 5px;
+    height: 400px;
 }
 
 #resultFlights {
@@ -93,6 +94,11 @@ input:checked + .slider:before {
 
 }
 
+#debugButton {
+    cursor: pointer;
+    color: #9fcdff;
+}
+
 .to {
     padding-left: 45px !important;
 }
@@ -105,7 +111,7 @@ input:checked + .slider:before {
 }
 
 #airport_from {
-    background: url("img/bg.jpg") no-repeat -60px -30px;
+    background: url("img/bg.jpg") no-repeat -90px -30px;
     margin-left: -5px;
 
 }

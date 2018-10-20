@@ -81,6 +81,11 @@ $(document).ready(function () {
 
     });
 
+    $('#debugButton').on('click', function () {
+        $('#log').toggle();
+        $('#resultFlights').toggle();
+    });
+
     $('#saveSettings').on('click', function () {
         var stayForFrom = $('#stayForFrom').val();
         var stayForTo = $('#stayForTo').val();

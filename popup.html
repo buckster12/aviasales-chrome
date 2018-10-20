@@ -16,6 +16,7 @@
 
 <div class="header">
     <strong class="head_strong">Enable extension</strong>
+    <span id="debugButton">[debug]</span>
     <label class="switch float-right">
         <input type="checkbox">
         <span class="slider round"></span>
@@ -92,14 +93,14 @@
                 <span id="saveSettings" class="btn btn-success">save</span>
             </div>
         </div>
+        <div id="result"></div>
     </div>
     <br>
     <div class="row">
         <div id="resultFlights"></div>
+        <textarea name="" id="log" style="display: none" cols="47" rows="8"></textarea><br><br>
     </div>
-    <div id="result"></div>
-    Debug: <br>
-    <textarea name="" id="log" cols="50" rows="5"></textarea><br><br>
+
 </div>
 </body>
 </html>
