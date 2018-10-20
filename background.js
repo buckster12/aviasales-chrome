@@ -21,13 +21,32 @@ function onAlarm(alarm) {
         var from = "MOW";
         var to = "CMB";
 
-        // chrome.storage.local.get(['myRandomKey'], function(result) {
-        //     console.log('Value currently is ' + result.key);
-        // });
 
 
-        var action_url = "https://www.aviasales.ru/search/"+from+dateFrom+to+dateTo+"1";
-        var creating = chrome.tabs.create({ url: action_url });
+        chrome.storage.local.get(['flights'], function(result) {
+            var flights = result.flights;
+            flights.every(function (item) {
+            // flights.forEach(function (item) {
+                if(item.price == null) {
+                    console.log(item);
+                    // var dateFrom = Date.parse();
+                    // console.log('start date:'+ item.start);
+                    // console.log('moment date:' + );
+                    var dateFrom = moment(item.start).format("DDMM");
+                    var dateTo = moment(item.end).format("DDMM");
+
+                    var action_url = "https://www.aviasales.ru/search/"+from+dateFrom+to+dateTo+"1";
+                    var creating = chrome.tabs.create({ url: action_url });
+
+                    return 1;
+                }
+            });
+        });
+
+
+
+
+
     });
 }
 

@@ -4,7 +4,7 @@
   "description": "This extension is need to help us to find the cheapest flies over the world via site aviasales.ru",
   "version": "0.1",
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["background.js", "plugins/moment.js"],
     "persistent": false
   },
   "icons": {

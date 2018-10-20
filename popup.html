@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="bootstrap.min.css">
     <script src="bootstrap.min.js"></script>
     <script src="plugins/bootstrap-datepicker.js"></script>
+    <script src="plugins/moment.js"></script>
     <link rel="stylesheet" href="plugins/bootstrap-datepicker.css">
 </head>
 <body>
@@ -29,15 +30,17 @@ To: <select name="" id="to">
 
 <br>
 
-From: <input type="text" id="dateFrom" size="10" class="datepicker">
-To:&nbsp;<input type="text" id="dateTo" size="10" class="datepicker">
+From: <input type="text" id="dateFrom" size="10" class="datepicker" value="2018-03-01">
+To:&nbsp;<input type="text" id="dateTo" size="10" class="datepicker" value="2018-03-10">
 
 <br>
 
 <br>
 <br>
-Stay for:
-<input type="text" id="durationInput" size="2" maxlength="2" value="13"> days
+Stay for (from):
+<input type="text" id="stayForFrom" size="2" maxlength="2" value="9">
+to
+<input type="text" id="stayForTo" size="2" maxlength="2" value="14"> days
 
 <br>
 <br>
@@ -46,7 +49,7 @@ Stay for:
 
 <br>
 
-<span id="getValue" class="btn btn-info">get</span>
+<span id="getValue" class="btn btn-info">get temp</span>
 
 <div id="result"></div>
 
