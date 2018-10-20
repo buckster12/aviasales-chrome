@@ -1,10 +1,9 @@
-
 function getDates(startDate, stopDate) {
-    var dateArray = [];
-    var currentDate = moment(startDate);
-    var stopDate = moment(stopDate);
+    let dateArray = [];
+    let currentDate = moment(startDate);
+    stopDate = moment(stopDate);
     while (currentDate <= stopDate) {
-        dateArray.push( moment(currentDate).format('YYYY-MM-DD') );
+        dateArray.push(moment(currentDate).format('YYYY-MM-DD'));
         currentDate = moment(currentDate).add(1, 'days');
     }
     return dateArray;
@@ -16,7 +15,7 @@ const getRange = (start, stop) => Array.from(
 );
 
 function calculateNextDate(currentDate, stayFor) {
-    var currentDate = moment(currentDate).add(stayFor, 'days');
+    currentDate = moment(currentDate).add(stayFor, 'days');
     return moment(currentDate).format('YYYY-MM-DD');
 }
 
@@ -28,7 +27,7 @@ $(document).ready(function () {
     });
 
     // load values
-    chrome.storage.local.get(null, function(items) {
+    chrome.storage.local.get(null, function (items) {
         $('#log').text(JSON.stringify(items));
         $('#dateFrom').val(items.dateFrom);
         $('#stayForFrom').val(items.stayForFrom);
@@ -39,20 +38,17 @@ $(document).ready(function () {
         $('#enableExtension').prop("checked", items.enableExtension);
 
         items.flights.forEach(function (value, index) {
-            var flightRaw = document.createElement("div");
+            let flightRaw = document.createElement("div");
             flightRaw.classList.add("flightRaw");
-            var flightRawPrice = document.createElement("span");
+            let flightRawPrice = document.createElement("span");
             flightRawPrice.classList.add("price");
             flightRawPrice.textContent = value.price;
 
-            flightRaw.textContent = value.start +" - "+ value.end + " = ";
-            // flightRaw.appendChild(flightRaw);
+            flightRaw.textContent = value.start + " - " + value.end + " = ";
             flightRaw.appendChild(flightRawPrice);
             document.querySelector("#resultFlights").appendChild(flightRaw);
         });
     });
-
-    var $jsonData;
 
     // TODO: file get json airports
     // var items = ['<option></option>'];
@@ -67,18 +63,15 @@ $(document).ready(function () {
     // }).appendTo( "#airport_from" );
 
     $('#enableExtension').on('change', function () {
-        var value = $(this).is(":checked");
-        chrome.storage.local.set({'enableExtension':value}, function(result) {});
+        let value = $(this).is(":checked");
+        chrome.storage.local.set({'enableExtension': value}, function (result) {
+        });
     });
 
-    $('#buttonTest').on('click', function () {
-        
-        // chrome.alarms.create('checkNewTasks', {
-            // when: 1000,
-            // periodInMinutes: 1
-        // });
-
-
+    $('#buttonCron').on('click', function () {
+        chrome.alarms.create('checkNewTasks', {
+            periodInMinutes: 1
+        });
     });
 
     $('#debugButton').on('click', function () {
@@ -87,26 +80,23 @@ $(document).ready(function () {
     });
 
     $('#saveSettings').on('click', function () {
-        var stayForFrom = $('#stayForFrom').val();
-        var stayForTo = $('#stayForTo').val();
-        var dateFrom = $('#dateFrom').val();
-        var dateTo = $('#dateTo').val();
-        var airportFrom = $('#airportFrom').val();
-        var airportTo = $('#airportTo').val();
+        let stayForFrom = $('#stayForFrom').val();
+        let stayForTo = $('#stayForTo').val();
+        let dateFrom = $('#dateFrom').val();
+        let dateTo = $('#dateTo').val();
+        let airportFrom = $('#airportFrom').val();
+        let airportTo = $('#airportTo').val();
+        let stayForArray = getRange(parseInt(stayForFrom), parseInt(stayForTo));
+        let flightsJson = [];
 
-        var dates = getDates(dateFrom, dateTo);
-        var datesJson = JSON.stringify(dates);
-
-        var stayForArray = getRange(parseInt(stayForFrom), parseInt(stayForTo) );
-
-        var flightsJson = [];
-        dates.forEach(function (item, index) {
-            stayForArray.forEach(function (stayFor, index) {
-                flightsJson.push({start: item, end: calculateNextDate(item,stayFor), price: null, tabId: null});
+        let dates = getDates(dateFrom, dateTo);
+        dates.forEach(function (item) {
+            stayForArray.forEach(function (stayFor) {
+                flightsJson.push({start: item, end: calculateNextDate(item, stayFor), price: null, tabId: null});
             });
         });
 
-        values = {
+        let values = {
             stayForTo: stayForTo,
             stayForFrom: stayForFrom,
             dateFrom: dateFrom,
@@ -116,15 +106,11 @@ $(document).ready(function () {
             flights: flightsJson
         };
 
-        chrome.storage.local.set(values, function() {
+        chrome.storage.local.set(values, function () {
             $('#result').html('<span>saved</span>');
             setTimeout(function () {
                 $('#result').find("span").fadeOut('slow')
             }, 200);
         });
     });
-
 });
-
-// Run alarm every minute
-// chrome.alarms.create('checkNewTasks', { periodInMinutes: 5 });

@@ -99,6 +99,11 @@ input:checked + .slider:before {
     color: #9fcdff;
 }
 
+#buttonCron {
+    cursor: pointer;
+    color: #9fcdff;
+}
+
 .to {
     padding-left: 45px !important;
 }
