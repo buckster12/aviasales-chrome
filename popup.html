@@ -38,72 +38,68 @@
             </div>
         </div>
 
-    <div class="to col-6" style="padding-right: 35px">
-        <div class="form-group">
-            <label for="airportTo">To</label>
-            <input type="text" list="fly_to" id="airportTo" class="form-control"/>
-            <datalist id="fly_to">
-                <option value="CMB">Colombo</option>
-                <option value="MLE">Male</option>
-            </datalist>
+        <div class="to col-6" style="padding-right: 35px">
+            <div class="form-group">
+                <label for="airportTo">To</label>
+                <input type="text" list="fly_to" id="airportTo" class="form-control"/>
+                <datalist id="fly_to">
+                    <option value="CMB">Colombo</option>
+                    <option value="MLE">Male</option>
+                </datalist>
+            </div>
+            <div class="form-group">
+                <input type="text" id="dateTo" size="10" class="datepicker" value="2018-03-01">
+            </div>
         </div>
-        <div class="form-group">
-            <input type="text" id="dateTo" size="10" class="datepicker" value="2018-03-01">
-        </div>
-    </div>
     </div>
 
     <div class="row form-group">
         <div class="col-6">
-            <label for="stayForFrom">Stay for (from):</label>
+            <label for="stayForFrom">Stay for:</label>
         </div>
         <div class="col-6">
-            <label for="stayForFrom">Select Currency:</label>
+            <label>Select currency:</label>
         </div>
     </div>
 
     <div class="row form-group">
         <div class="form-group col-6 stay">
-            <input type="text" id="stayForFrom" size="2" maxlength="2" value="9">
-            <label for="stayForTo">To</label>
-            <input type="text" id="stayForTo" size="2" maxlength="2" value="14">
+            <label>from</label>
+            <input type="text" id="stayForFrom" size="4" maxlength="2" value="9">
+            <label>to</label>
+            <input type="text" id="stayForTo" size="4" maxlength="2" value="14">
+            <label>days</label>
         </div>
         <div class="form-group col-6 stay">
             <div class="row">
-                <div class="col-1" style="line-height: 28px">
-                    <input type="radio" class="" value="$USD" id="usd" name="cur"><br>
-                    <input type="radio" class="" value="&euro;EURO" id='euro' name="cur"><br>
-                    <input type="radio" class="" value="&#8381;RUR" id="rur" name="cur"><br>
+                <div class="col-1" style="line-height: 28px;">
+                    <input type="radio" class="" value="USD" id="curUsd" checked name="cur">
+                    <input type="radio" class="" value="EUR" id='curEuro' name="cur">
+                    <input type="radio" class="" value="RUR" id="curRur" name="cur">
                 </div>
                 <div class="col-3">
-                    <label for="usd">$USD</label>
-                    <label for="euro">&euro;EURO</label>
-                    <label for="rur">&#8381;RUR</label>
-            </div>
-
+                    <label for="curUsd">USD</label>
+                    <label for="curEuro">EUR</label>
+                    <label for="curRur">RUR</label>
+                </div>
             </div>
         </div>
     </div>
 
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <span id="saveSettings" class="btn btn-success">save</span>
-                </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="">
+                <span id="saveSettings" class="btn btn-success">save</span>
             </div>
-
-        <!--<div class="col-6">-->
-            <!--<div class="form-group">-->
-                <!--<span id="getValue" class="btn btn-info">get temp</span>-->
-            <!--</div>-->
-        <!--</div>-->
         </div>
-        <div class="row">
-            <div id="resultFlights"></div>
-        </div>
-<div id="result"></div>
-Debug: <br>
-<textarea name="" id="log" cols="30" rows="10"></textarea><br><br>
+    </div>
+    <br>
+    <div class="row">
+        <div id="resultFlights"></div>
+    </div>
+    <div id="result"></div>
+    Debug: <br>
+    <textarea name="" id="log" cols="50" rows="5"></textarea><br><br>
 </div>
 </body>
 </html>

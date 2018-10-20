@@ -100,8 +100,12 @@ input:checked + .slider:before {
     color: white;
 }
 
+.form-group {
+    margin-bottom: 0.5em !important;
+}
+
 #airport_from {
-    background: url("img/bg.jpg") no-repeat;
+    background: url("img/bg.jpg") no-repeat -60px -30px;
     margin-left: -5px;
 
 }
@@ -131,6 +135,6 @@ select:focus {
 }
 
 .stay input {
-    width: 22px;
+    width: 30px;
 }
 
