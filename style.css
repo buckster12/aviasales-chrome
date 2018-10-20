@@ -4,14 +4,14 @@ body {
 }
 
 #resultFlights {
-    float:right;
-    width: 300px;
-    height: 500px;
-    background-color: #abdde5;
+    width: 450px;
+    height: 200px;
+    background-color: #598ea0;
     border-radius: 4px;
     padding: 3px 6px;
     border: 1px solid #0c5460;
-    overflow-y: scroll;
+    overflow-y: auto;
+    color: white;
 }
 
 .flightRaw .price {
@@ -42,7 +42,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: lightcoral;
+    background-color: lightgreen;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -60,7 +60,7 @@ body {
 }
 
 input:checked + .slider {
-    background-color: lightgreen;
+    background-color: lightcoral;
 }
 
 input:focus + .slider {
