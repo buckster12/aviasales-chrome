@@ -1,8 +1,23 @@
 body {
-    width: 400px;
+    width: 600px;
     padding: 5px 5px;
 }
 
 /*.datepicker {*/
     /*width: 50px;*/
 /*}*/
+
+#resultFlights {
+    float:right;
+    width: 300px;
+    height: 500px;
+    background-color: #abdde5;
+    border-radius: 4px;
+    padding: 3px 6px;
+    border: 1px solid #0c5460;
+    overflow-y: scroll;
+}
+
+.flightRaw .price {
+    font-weight: bold;
+}

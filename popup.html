@@ -14,51 +14,38 @@
 </head>
 <body>
 
-<input type="checkbox" id="enableExtension"> Enable extension
-<br>
-<br>
+<div style="float:left;">
+    <input type="checkbox" id="enableExtension"> Enable extension<br><br>
 
-From: <select id="airportFrom">
-    <option value="MSQ">Минск</option>
-    <option value="VNO">Вильнюс</option>
-    <option value="MOW">Москва</option>
-</select>
-To: <select id="airportTo">
-    <option value="CMB">Colombo</option>
-</select>
+    From:
+    <select id="airportFrom">
+        <option value="MSQ">Минск</option>
+        <option value="VNO">Вильнюс</option>
+        <option value="MOW">Москва</option>
+    </select>
+    To:
+    <select id="airportTo">
+        <option value="CMB">Colombo</option>
+    </select><br>
 
+    From: <input type="text" id="dateFrom" size="10" class="datepicker" value="2018-03-01">
+    To:&nbsp;<input type="text" id="dateTo" size="10" class="datepicker" value="2018-03-10"><br><br>
 
-<br>
+    Stay for (from):
+    <input type="text" id="stayForFrom" size="2" maxlength="2" value="9">
+    to
+    <input type="text" id="stayForTo" size="2" maxlength="2" value="14"> days
 
-From: <input type="text" id="dateFrom" size="10" class="datepicker" value="2018-03-01">
-To:&nbsp;<input type="text" id="dateTo" size="10" class="datepicker" value="2018-03-10">
+    <br><br>
+    <span id="saveSettings" class="btn btn-info">save</span><br><br>
+    <div id="result"></div>
 
-<br>
+    Debug: <br>
+    <textarea name="" id="log" cols="30" rows="10"></textarea><br><br>
+</div>
 
-<br>
-<br>
-Stay for (from):
-<input type="text" id="stayForFrom" size="2" maxlength="2" value="9">
-to
-<input type="text" id="stayForTo" size="2" maxlength="2" value="14"> days
-
-<br>
-<br>
-
-<span id="saveSettings" class="btn btn-info">save</span>
-
-<br>
-
-<span id="getValue" class="btn btn-info">get temp</span>
-
-<div id="result"></div>
-
-<!--<span id="buttonTest" class="btn btn-primary">open aviasales</span>-->
-
-<textarea name="" id="log" cols="30" rows="10"></textarea>
-
-<br>
-<br>
+<div id="resultFlights">
+</div>
 
 <!--<textarea id="input"></textarea><br>-->
 <!--<input id="btn_submit" type="submit"><br>-->

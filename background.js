@@ -1,32 +1,87 @@
 // event: called when extension is installed or updated or Chrome is updated
-function onInstalled() { }
+function onInstalled() {
+}
+
+
+function openNewTab(item, index, flights, airportFrom, airportTo) {
+    console.log("call openNewTab()");
+    var dateFrom = moment(item.start).format("DDMM");
+    var dateTo = moment(item.end).format("DDMM");
+
+    var action_url = "https://www.aviasales.ru/search/" + airportFrom + dateFrom + airportTo + dateTo + "1";
+    chrome.tabs.create({url: action_url, active: false}, function (tab) {
+        console.log('tab opened: ' + tab.id);
+        flights[index].tabId = tab.id;
+        chrome.storage.local.set({flights: flights}, function (result) {
+            console.log('tab updated in db');
+        });
+        return false;
+    });
+    return true;
+}
 
 function onAlarm(alarm) {
     // default set to false, to prevent of infinity of windows
     var enabled = false;
+    var openedTab = false;
 
     // check if extension enabled
-    chrome.storage.local.get(['enableExtension','airportTo', 'airportFrom'], function (result) {
+    chrome.storage.local.get(['enableExtension', 'airportTo', 'airportFrom'], function (result) {
         enabled = result.enableExtension;
         var airportFrom = result.airportFrom;
         var airportTo = result.airportTo;
 
-        if(enabled == false) {
+        if (enabled == false) {
             console.log('exension disabled');
             return false;
         }
 
-        chrome.storage.local.get(['flights'], function(result) {
+        chrome.storage.local.get(['flights'], function (result) {
             var flights = result.flights;
 
+            // open next flight's window
             flights.every(function (item, index) {
-                console.log('index: '+index);
+                if(item.tabId !== null) {
+                    return true;
+                }
+                if (parseInt(item.price) > 0) {
+                    return true;
+                }
+                console.log('index: ' + index);
+                console.log(item);
 
+
+                // find un-checked flight
+                if (item.price == null) {
+                    // console.log(item);
+                    openNewTab(item, index, flights, airportFrom, airportTo);
+                    // return false;
+                } else {
+                    // send true to continue every()
+                    return true;
+                }
+
+                return false;
+            });
+
+            // process old flight and get price
+            flights.every(function (item, index) {
+                if (item.tabId === null) {
+                    return true;
+                }
                 // check opened tabs
-                if(item.tabId && item.tabId != null) {
+                if (item.tabId && item.tabId != null) {
+                    var currentTabId = item.tabId;
+
                     chrome.tabs.get(item.tabId, function (result) {
                         if (chrome.runtime.lastError) {
-                            // console.log('MY_ERROR: '+chrome.runtime.lastError.message);
+                            // clear tabId and continue
+                            console.log('cannot get info about tab');
+                            flights[index].tabId = null;
+                            chrome.storage.local.set({flights: flights}, function () {
+                                openNewTab(item, index, flights, airportFrom, airportTo);
+                                openedTab = true;
+                            });
                         } else {
                             // check if tab exists and complete already
                             if (result.status === 'complete') {
@@ -37,54 +92,41 @@ function onAlarm(alarm) {
                                         };
                                     } + ')()'
                                 }, function (results) {
-                                    // if get price
-                                    if(results != null && typeof results[0] !== 'undefined') {
-                                        console.log('Min price is '+results[0].price);
+                                    chrome.tabs.remove(currentTabId);
+                                    console.log('close the tab id=' + currentTabId);
 
-                                        var updateValue = flights[index];
-                                        updateValue.price = parseInt(results[0].price);
-                                        updateValue.tabId = null;
-                                        chrome.storage.local.set(updateValue, function (result) {
+                                    // if get price
+                                    if (results != null && typeof results[0] !== 'undefined') {
+                                        console.log('Min price is ' + results[0].price);
+
+                                        flights[index].tabId = null;
+                                        flights[index].price = parseInt(results[0].price);
+                                        chrome.storage.local.set({flights: flights}, function (result) {
                                             console.log('price and tabId updated');
                                         });
-                                    }
 
-                                    // close tab and update tabId to null
-                                    chrome.tabs.remove(item.tabId);
-                                    // var updateValue = flights[index];
-                                    // updateValue.tabId = null;
-                                    // chrome.storage.local.set(updateValue);
+                                        // here we should open new tab!!!
+                                        // BUT FOR NEXT!!!!!
+                                        // openNewTab(item, index, flights, airportFrom, airportTo);
+
+                                    } else {
+                                        // console.log('cannot get price');
+                                    }
                                 });
                             }
                         }
                     });
-                }
-
-                // find un-checked flight
-                if(item.price == null) {
-                    console.log(item);
-
-                    var dateFrom = moment(item.start).format("DDMM");
-                    var dateTo = moment(item.end).format("DDMM");
-
-                    var action_url = "https://www.aviasales.ru/search/"+airportFrom+dateFrom+airportTo+dateTo+"1";
-                    chrome.tabs.create({ url: action_url, active: false }, function (tab) {
-                        // console.log(tab);
-
-                        // flights[index].price = 500;
-                        flights[index].tabId = tab.id;
-                        // console.log(flights);
-
-                        chrome.storage.local.set({flights: flights}, function(result) {});
-                        return false;
-                    });
-                } else {
-                    // send true to continue every()
-                    return true;
+                    // console.log("HERE WE UPDATED PRICE, but cannot open new tab");
+                    // console.log('is tab opened: ' + openedTab);
+                    // if(openNewTab === false) {
+                    //     return false;
+                    // }
+                    return false;
+                    // return true;
                 }
             });
-        });
 
+        });
 
     });
 }
@@ -97,7 +139,8 @@ function onCreated() {
     console.log('tab created');
 }
 
-function onStartup() { }
+function onStartup() {
+}
 
 
 // listen for extension install or update

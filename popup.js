@@ -37,6 +37,19 @@ $(document).ready(function () {
         $('#airportFrom').val(items.airportFrom);
         $('#airportTo').val(items.airportTo);
         $('#enableExtension').prop("checked", items.enableExtension);
+
+        items.flights.forEach(function (value, index) {
+            var flightRaw = document.createElement("div");
+            flightRaw.classList.add("flightRaw");
+            var flightRawPrice = document.createElement("span");
+            flightRawPrice.classList.add("price");
+            flightRawPrice.textContent = value.price;
+
+            flightRaw.textContent = value.start +" - "+ value.end + " = ";
+            // flightRaw.appendChild(flightRaw);
+            flightRaw.appendChild(flightRawPrice);
+            document.querySelector("#resultFlights").appendChild(flightRaw);
+        });
     });
 
     var $jsonData;
