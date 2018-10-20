@@ -34,7 +34,22 @@ $(document).ready(function () {
         $('#stayForFrom').val(items.stayForFrom);
         $('#stayForTo').val(items.stayForTo);
         $('#dateTo').val(items.dateTo);
+        $('#airportFrom').val(items.airportFrom);
+        $('#airportTo').val(items.airportTo);
         $('#enableExtension').prop("checked", items.enableExtension);
+
+        items.flights.forEach(function (value, index) {
+            var flightRaw = document.createElement("div");
+            flightRaw.classList.add("flightRaw");
+            var flightRawPrice = document.createElement("span");
+            flightRawPrice.classList.add("price");
+            flightRawPrice.textContent = value.price;
+
+            flightRaw.textContent = value.start +" - "+ value.end + " = ";
+            // flightRaw.appendChild(flightRaw);
+            flightRaw.appendChild(flightRawPrice);
+            document.querySelector("#resultFlights").appendChild(flightRaw);
+        });
     });
 
     var $jsonData;
@@ -63,13 +78,7 @@ $(document).ready(function () {
             // periodInMinutes: 1
         // });
 
-        var dateFrom = '0802';
-        var dateTo = '2102';
-        var from = "MOW";
-        var to = "CMB";
 
-        // var action_url = "https://www.aviasales.ru/search/"+from+dateFrom+to+dateTo+"1";
-        // chrome.tabs.create({ url: action_url });
     });
 
     $('#saveSettings').on('click', function () {
@@ -77,31 +86,30 @@ $(document).ready(function () {
         var stayForTo = $('#stayForTo').val();
         var dateFrom = $('#dateFrom').val();
         var dateTo = $('#dateTo').val();
+        var airportFrom = $('#airportFrom').val();
+        var airportTo = $('#airportTo').val();
 
         var dates = getDates(dateFrom, dateTo);
         var datesJson = JSON.stringify(dates);
-        // $('#log').text(datesJson);
 
         var stayForArray = getRange(parseInt(stayForFrom), parseInt(stayForTo) );
 
         var flightsJson = [];
         dates.forEach(function (item, index) {
             stayForArray.forEach(function (stayFor, index) {
-                flightsJson.push({start: item, end: calculateNextDate(item,stayFor), price: null});
+                flightsJson.push({start: item, end: calculateNextDate(item,stayFor), price: null, tabId: null});
             });
         });
-        // var jsonArray = JSON.stringify(flights);
-        // var jsonArray = JSON.parse(JSON.stringify(flights));
 
         values = {
             stayForTo: stayForTo,
             stayForFrom: stayForFrom,
             dateFrom: dateFrom,
             dateTo: dateTo,
-            // flyDates: datesJson,
+            airportTo: airportTo,
+            airportFrom: airportFrom,
             flights: flightsJson
         };
-        // console.log(values);
 
         chrome.storage.local.set(values, function() {
             $('#result').html('<span>saved</span>');

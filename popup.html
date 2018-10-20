@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="style.css">
     <script src="jquery-3.3.1.js"></script>
     <script src="popup.js"></script>
@@ -12,6 +13,7 @@
     <link rel="stylesheet" href="plugins/bootstrap-datepicker.css">
 </head>
 <body>
+
 <div class="header">
     <strong class="head_strong">Enable extension</strong>
     <label class="switch float-right">
@@ -25,7 +27,7 @@
         <div class="col-6 from">
             <div class="form-group">
                 <label for="from">From</label>
-                <input type="text" list="fly_from" id="from" class="form-control"/>
+                <input type="text" list="fly_from" id="airportFrom" class="form-control"/>
                 <datalist id="fly_from">
                     <option value="MOW">Moscow</option>
                     <option value="MSQ">Minsk</option>
@@ -39,10 +41,10 @@
     <div class="to col-6" style="padding-right: 35px">
         <div class="form-group">
             <label for="to">To</label>
-            <input type="text" list="fly_to" id="to" class="form-control"/>
+            <input type="text" list="fly_to" id="airportTo" class="form-control"/>
             <datalist id="fly_to">
-                <option value="MOW">Moscow</option>
-                <option value="MSQ">Minsk</option>
+                <option value="CMB">Colombo</option>
+                <option value="MLE">Male</option>
             </datalist>
         </div>
         <div class="form-group">
@@ -75,16 +77,12 @@
 </div>
 </div>
 <div id="result"></div>
+    Debug: <br>
+    <textarea name="" id="log" cols="30" rows="10"></textarea><br><br>
+</div>
 
-<!--<span id="buttonTest" class="btn btn-primary">open aviasales</span>-->
+<div id="resultFlights">
+</div>
 
-<textarea name="" id="log" cols="30" rows="10"></textarea>
-
-<br>
-<br>
-
-<!--<textarea id="input"></textarea><br>-->
-<!--<input id="btn_submit" type="submit"><br>-->
-<!--<div id="result"></div>-->
 </body>
 </html>
