@@ -6,45 +6,84 @@ function onAlarm(alarm) {
     var enabled = false;
 
     // check if extension enabled
-    chrome.storage.local.get(['enableExtension'], function (result) {
+    chrome.storage.local.get(['enableExtension','airportTo', 'airportFrom'], function (result) {
         enabled = result.enableExtension;
+        var airportFrom = result.airportFrom;
+        var airportTo = result.airportTo;
 
         if(enabled == false) {
             console.log('exension disabled');
             return false;
         }
 
-        var betweenDates = ['01.02', '31.03'];
-
-        var dateFrom = '0802';
-        var dateTo = '2102';
-        var from = "MOW";
-        var to = "CMB";
-
-
-
         chrome.storage.local.get(['flights'], function(result) {
             var flights = result.flights;
-            flights.every(function (item) {
-            // flights.forEach(function (item) {
+
+            flights.every(function (item, index) {
+                console.log('index: '+index);
+
+                // check opened tabs
+                if(item.tabId && item.tabId != null) {
+                    chrome.tabs.get(item.tabId, function (result) {
+                        if (chrome.runtime.lastError) {
+                            // console.log('MY_ERROR: '+chrome.runtime.lastError.message);
+                        } else {
+                            // check if tab exists and complete already
+                            if (result.status === 'complete') {
+                                chrome.tabs.executeScript(result.id, {
+                                    code: '(' + function () {
+                                        return {
+                                            price: document.querySelector('.sorting__price-wrap .price').innerHTML,
+                                        };
+                                    } + ')()'
+                                }, function (results) {
+                                    // if get price
+                                    if(results != null && typeof results[0] !== 'undefined') {
+                                        console.log('Min price is '+results[0].price);
+
+                                        var updateValue = flights[index];
+                                        updateValue.price = parseInt(results[0].price);
+                                        updateValue.tabId = null;
+                                        chrome.storage.local.set(updateValue, function (result) {
+                                            console.log('price and tabId updated');
+                                        });
+                                    }
+
+                                    // close tab and update tabId to null
+                                    chrome.tabs.remove(item.tabId);
+                                    // var updateValue = flights[index];
+                                    // updateValue.tabId = null;
+                                    // chrome.storage.local.set(updateValue);
+                                });
+                            }
+                        }
+                    });
+                }
+
+                // find un-checked flight
                 if(item.price == null) {
                     console.log(item);
-                    // var dateFrom = Date.parse();
-                    // console.log('start date:'+ item.start);
-                    // console.log('moment date:' + );
+
                     var dateFrom = moment(item.start).format("DDMM");
                     var dateTo = moment(item.end).format("DDMM");
 
-                    var action_url = "https://www.aviasales.ru/search/"+from+dateFrom+to+dateTo+"1";
-                    var creating = chrome.tabs.create({ url: action_url });
+                    var action_url = "https://www.aviasales.ru/search/"+airportFrom+dateFrom+airportTo+dateTo+"1";
+                    chrome.tabs.create({ url: action_url, active: false }, function (tab) {
+                        // console.log(tab);
 
-                    return 1;
+                        // flights[index].price = 500;
+                        flights[index].tabId = tab.id;
+                        // console.log(flights);
+
+                        chrome.storage.local.set({flights: flights}, function(result) {});
+                        return false;
+                    });
+                } else {
+                    // send true to continue every()
+                    return true;
                 }
             });
         });
-
-
-
 
 
     });

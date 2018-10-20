@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="style.css">
     <script src="jquery-3.3.1.js"></script>
     <script src="popup.js"></script>
@@ -13,17 +14,16 @@
 </head>
 <body>
 
-<input type="checkbox" id="enableExtension"> enable extension
+<input type="checkbox" id="enableExtension"> Enable extension
 <br>
 <br>
 
-<div id="airport_from"></div>
-
-
-From: <select name="airport_from" id="from">
-    <option value="MOW">Moscow</option>
+From: <select id="airportFrom">
+    <option value="MSQ">Минск</option>
+    <option value="VNO">Вильнюс</option>
+    <option value="MOW">Москва</option>
 </select>
-To: <select name="" id="to">
+To: <select id="airportTo">
     <option value="CMB">Colombo</option>
 </select>
 

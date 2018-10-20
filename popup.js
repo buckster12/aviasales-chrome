@@ -34,6 +34,8 @@ $(document).ready(function () {
         $('#stayForFrom').val(items.stayForFrom);
         $('#stayForTo').val(items.stayForTo);
         $('#dateTo').val(items.dateTo);
+        $('#airportFrom').val(items.airportFrom);
+        $('#airportTo').val(items.airportTo);
         $('#enableExtension').prop("checked", items.enableExtension);
     });
 
@@ -63,13 +65,7 @@ $(document).ready(function () {
             // periodInMinutes: 1
         // });
 
-        var dateFrom = '0802';
-        var dateTo = '2102';
-        var from = "MOW";
-        var to = "CMB";
 
-        // var action_url = "https://www.aviasales.ru/search/"+from+dateFrom+to+dateTo+"1";
-        // chrome.tabs.create({ url: action_url });
     });
 
     $('#saveSettings').on('click', function () {
@@ -77,10 +73,11 @@ $(document).ready(function () {
         var stayForTo = $('#stayForTo').val();
         var dateFrom = $('#dateFrom').val();
         var dateTo = $('#dateTo').val();
+        var airportFrom = $('#airportFrom').val();
+        var airportTo = $('#airportTo').val();
 
         var dates = getDates(dateFrom, dateTo);
         var datesJson = JSON.stringify(dates);
-        // $('#log').text(datesJson);
 
         var stayForArray = getRange(parseInt(stayForFrom), parseInt(stayForTo) );
 
@@ -90,18 +87,16 @@ $(document).ready(function () {
                 flightsJson.push({start: item, end: calculateNextDate(item,stayFor), price: null});
             });
         });
-        // var jsonArray = JSON.stringify(flights);
-        // var jsonArray = JSON.parse(JSON.stringify(flights));
 
         values = {
             stayForTo: stayForTo,
             stayForFrom: stayForFrom,
             dateFrom: dateFrom,
             dateTo: dateTo,
-            // flyDates: datesJson,
+            airportTo: airportTo,
+            airportFrom: airportFrom,
             flights: flightsJson
         };
-        // console.log(values);
 
         chrome.storage.local.set(values, function() {
             $('#result').html('<span>saved</span>');
