@@ -42,9 +42,11 @@ function onAlarm(alarm) {
             // open next flight's window
             flights.every(function (item, index) {
                 if(item.tabId !== null) {
+                    console.log("skip NOT null tabId: "+item.tabId);
                     return true;
                 }
                 if (parseInt(item.price) > 0) {
+                    console.log("skip price > 0");
                     return true;
                 }
                 console.log('index: ' + index);
@@ -60,7 +62,6 @@ function onAlarm(alarm) {
                     // send true to continue every()
                     return true;
                 }
-
                 return false;
             });
 

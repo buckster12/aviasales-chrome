@@ -97,7 +97,7 @@ $(document).ready(function () {
         var flightsJson = [];
         dates.forEach(function (item, index) {
             stayForArray.forEach(function (stayFor, index) {
-                flightsJson.push({start: item, end: calculateNextDate(item,stayFor), price: null});
+                flightsJson.push({start: item, end: calculateNextDate(item,stayFor), price: null, tabId: null});
             });
         });
 
