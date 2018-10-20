@@ -12,45 +12,68 @@
     <link rel="stylesheet" href="plugins/bootstrap-datepicker.css">
 </head>
 <body>
+<div class="header">
+    <strong class="head_strong">Enable extension</strong>
+    <label class="switch float-right">
+        <input type="checkbox">
+        <span class="slider round"></span>
+    </label>
+</div>
 
-<input type="checkbox" id="enableExtension"> enable extension
-<br>
-<br>
+<div id="airport_from" class="container">
+    <div class="row">
+        <div class="col-6 from">
+            <div class="form-group">
+                <label for="from">From</label>
+                <input type="text" list="fly_from" id="from" class="form-control"/>
+                <datalist id="fly_from">
+                    <option value="MOW">Moscow</option>
+                    <option value="MSQ">Minsk</option>
+                </datalist>
+            </div>
+            <div class="form-group">
+                <input type="text" id="dateFrom" size="10" class="datepicker" value="2018-03-01">
+            </div>
+        </div>
 
-<div id="airport_from"></div>
+    <div class="to col-6" style="padding-right: 35px">
+        <div class="form-group">
+            <label for="to">To</label>
+            <input type="text" list="fly_to" id="to" class="form-control"/>
+            <datalist id="fly_to">
+                <option value="MOW">Moscow</option>
+                <option value="MSQ">Minsk</option>
+            </datalist>
+        </div>
+        <div class="form-group">
+            <input type="text" id="dateTo" size="10" class="datepicker" value="2018-03-01">
+        </div>
+    </div>
+    </div>
 
+    <div class="row form-group"><div><label for="stayForFrom">Stay for (from):</label></div></div>
 
-From: <select name="airport_from" id="from">
-    <option value="MOW">Moscow</option>
-</select>
-To: <select name="" id="to">
-    <option value="CMB">Colombo</option>
-</select>
+        <div class="form-group stay">
+            <input type="text" id="stayForFrom" size="2" maxlength="2" value="9">
+            <label for="stayForTo">To</label>
+            <input type="text" id="stayForTo" size="2" maxlength="2" value="14">
+        </div>
 
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <span id="saveSettings" class="btn btn-success">save</span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <span id="getValue" class="btn btn-info">get temp</span>
+            </div>
+        </div>
 
-<br>
-
-From: <input type="text" id="dateFrom" size="10" class="datepicker" value="2018-03-01">
-To:&nbsp;<input type="text" id="dateTo" size="10" class="datepicker" value="2018-03-10">
-
-<br>
-
-<br>
-<br>
-Stay for (from):
-<input type="text" id="stayForFrom" size="2" maxlength="2" value="9">
-to
-<input type="text" id="stayForTo" size="2" maxlength="2" value="14"> days
-
-<br>
-<br>
-
-<span id="saveSettings" class="btn btn-info">save</span>
-
-<br>
-
-<span id="getValue" class="btn btn-info">get temp</span>
-
+    </div>
+</div>
+</div>
 <div id="result"></div>
 
 <!--<span id="buttonTest" class="btn btn-primary">open aviasales</span>-->
