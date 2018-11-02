@@ -2,7 +2,6 @@
 function onInstalled() {
 }
 
-
 function openNewTab(item, index, flights, airportFrom, airportTo) {
     console.log("call openNewTab()");
     var dateFrom = moment(item.start).format("DDMM");
