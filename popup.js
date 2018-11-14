@@ -26,6 +26,8 @@ $(document).ready(function () {
         format: "yyyy-mm-dd"
     });
 
+    const flightPrefix = 'flight_';
+
     // load values
     chrome.storage.local.get(null, function (items) {
         $('#log').text(JSON.stringify(items));
@@ -35,19 +37,35 @@ $(document).ready(function () {
         $('#dateTo').val(items.dateTo);
         $('#airportFrom').val(items.airportFrom);
         $('#airportTo').val(items.airportTo);
+        document.getElementById('minimalPrice').textContent = items.minimalPrice;
         $('#enableExtension').prop("checked", items.enableExtension);
 
-        items.flights.forEach(function (value, index) {
+        // const allowed = 'flight_';
+        // console.log(items);
+        // let flights = Object.keys(items).filter(key => allowed.includes(key));
+        // console.log(flights);
+        // alert(flights);
+
+        let flightsArray = [];
+        Object.keys(items).forEach(function(key) {
+            if(key.includes('flight')) {
+                let index = key.replace('flight_', '');
+                flightsArray[index] = items[key];
+            }
+        });
+
+        flightsArray.forEach(function (value, index) {
             let flightRaw = document.createElement("div");
             flightRaw.classList.add("flightRaw");
             let flightRawPrice = document.createElement("span");
             flightRawPrice.classList.add("price");
-            flightRawPrice.textContent = value.price;
+            flightRawPrice.textContent = value.price + '('+value.tabId+')';
 
             flightRaw.textContent = value.start + " - " + value.end + " = ";
             flightRaw.appendChild(flightRawPrice);
             document.querySelector("#resultFlights").appendChild(flightRaw);
         });
+
     });
 
     // TODO: file get json airports
@@ -74,6 +92,20 @@ $(document).ready(function () {
         });
     });
 
+    $('#buttonClear').on('click', function () {
+        chrome.storage.local.clear(function() {
+            var error = chrome.runtime.lastError;
+            if (error) {
+                console.error(error);
+            } else {
+                $('#result').html('<span>CLEARED!</span>');
+                setTimeout(function () {
+                    $('#result').find("span").fadeOut('slow')
+                }, 200);
+            }
+        });
+    });
+
     $('#debugButton').on('click', function () {
         $('#log').toggle();
         $('#resultFlights').toggle();
@@ -87,12 +119,17 @@ $(document).ready(function () {
         let airportFrom = $('#airportFrom').val();
         let airportTo = $('#airportTo').val();
         let stayForArray = getRange(parseInt(stayForFrom), parseInt(stayForTo));
-        let flightsJson = [];
+        let flightsObject = {};
+        // let minimalPrice = '';
+        const flightPrefix = 'flight_';
 
         let dates = getDates(dateFrom, dateTo);
+        var i=0;
         dates.forEach(function (item) {
             stayForArray.forEach(function (stayFor) {
-                flightsJson.push({start: item, end: calculateNextDate(item, stayFor), price: null, tabId: null});
+                // flightsObject.assign({start: item, end: calculateNextDate(item, stayFor), price: null, tabId: null });
+                flightsObject[flightPrefix+i] = Object.assign({start: item, end: calculateNextDate(item, stayFor), price: null, tabId: null })
+                i++;
             });
         });
 
@@ -103,10 +140,15 @@ $(document).ready(function () {
             dateTo: dateTo,
             airportTo: airportTo,
             airportFrom: airportFrom,
-            flights: flightsJson
+            // flights: flightsJson,
+            minimalPrice: null
         };
 
-        chrome.storage.local.set(values, function () {
+        // values.assign(flightsObject);
+
+        const finalValues = Object.assign(values, flightsObject);
+
+        chrome.storage.local.set(finalValues, function () {
             $('#result').html('<span>saved</span>');
             setTimeout(function () {
                 $('#result').find("span").fadeOut('slow')

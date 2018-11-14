@@ -18,6 +18,7 @@
     <strong class="head_strong">Enable extension</strong>
     <span id="debugButton">[debug]</span>
     <span id="buttonCron">[cron]</span>
+    <span id="buttonClear">[clear]</span>
 
     <!-- ADDED AGAIN -->
     <input type="checkbox" id="enableExtension">
@@ -51,8 +52,9 @@
                 <label for="airportTo">To</label>
                 <input type="text" list="fly_to" id="airportTo" class="form-control"/>
                 <datalist id="fly_to">
-                    <option value="CMB">Colombo</option>
-                    <option value="MLE">Male</option>
+                    <option value="CMB">Коломбо</option>
+                    <option value="MLE">Мале</option>
+                    <option value="GOI">Гоа</option>
                 </datalist>
             </div>
             <div class="form-group">
@@ -101,6 +103,7 @@
             </div>
         </div>
         <div id="result"></div>
+        <div><strong>Minimal price:</strong> <span id="minimalPrice">?</span></div>
     </div>
     <br>
     <div class="row">

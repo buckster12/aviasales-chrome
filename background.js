@@ -2,121 +2,173 @@
 function onInstalled() {
 }
 
-function openNewTab(item, index, flights, airportFrom, airportTo) {
-    console.log("call openNewTab()");
-    var dateFrom = moment(item.start).format("DDMM");
-    var dateTo = moment(item.end).format("DDMM");
+function parseFlight(result) {
+    let flightsArray = [];
+    Object.keys(result).forEach(function (key) {
+        if (key.includes('flight')) {
+            let index = key.replace('flight_', '');
+            flightsArray[index] = result[key];
+        }
+    });
+    return flightsArray;
+}
+
+function openNewTab(item, index, airportFrom, airportTo) {
+    'use strict';
+
+    let dateFrom = moment(item.start).format("DDMM");
+    let dateTo = moment(item.end).format("DDMM");
 
     var action_url = "https://www.aviasales.ru/search/" + airportFrom + dateFrom + airportTo + dateTo + "1";
     chrome.tabs.create({url: action_url, active: false}, function (tab) {
         console.log('tab opened: ' + tab.id);
-        flights[index].tabId = tab.id;
-        chrome.storage.local.set({flights: flights}, function (result) {
-            console.log('tab updated in db');
-        });
-        return false;
+        item.tabId = tab.id;
+        updateValue(index, item);
     });
     return true;
 }
 
-function onAlarm(alarm) {
+function onAlarm() {
     // default set to false, to prevent of infinity of windows
     var enabled = false;
-    var openedTab = false;
+    // var openedTab = false;
 
     // check if extension enabled
-    chrome.storage.local.get(['enableExtension', 'airportTo', 'airportFrom'], function (result) {
-        enabled = result.enableExtension;
-        var airportFrom = result.airportFrom;
-        var airportTo = result.airportTo;
+    chrome.storage.local.get(null, function (result) {
+        'use strict';
 
-        if (enabled == false) {
-            console.log('exension disabled');
+        const enabled = result.enableExtension;
+        const airportFrom = result.airportFrom;
+        const airportTo = result.airportTo;
+        const flightPrefix = 'flight_';
+
+        if (enabled === false) {
+            console.log('plugin disabled');
             return false;
         }
 
-        chrome.storage.local.get(['flights'], function (result) {
-            var flights = result.flights;
+        let flights = parseFlight(result);
 
-            // open next flight's window
-            flights.every(function (item, index) {
-                if(item.tabId !== null) {
-                    return true;
+        // open next flight's window
+        let maxNewTabs = 2;
+        flights.forEach(function (item, index) {
+            'use strict';
+
+            if (item.tabId !== null) {
+                if (item.tabId === false) {
+                    item.tabId = null;
+                    updateValue(index, item);
                 }
-                if (parseInt(item.price) > 0) {
-                    return true;
-                }
-                if (item.price == null) {
-                    openNewTab(item, index, flights, airportFrom, airportTo);
-                }
-                return false;
-            });
-
-            // process old flight and get price
-            flights.every(function (item, index) {
-                if (item.tabId === null) {
-                    return true;
-                }
-                // check opened tabs
-                if (item.tabId && item.tabId != null) {
-                    var currentTabId = item.tabId;
-
-                    chrome.tabs.get(item.tabId, function (result) {
-                        if (chrome.runtime.lastError) {
-                            // clear tabId and continue
-                            console.log('cannot get info about tab');
-                            flights[index].tabId = null;
-                            chrome.storage.local.set({flights: flights}, function () {
-                                openNewTab(item, index, flights, airportFrom, airportTo);
-                                openedTab = true;
-                            });
-                        } else {
-                            // check if tab exists and complete already
-                            if (result.status === 'complete') {
-                                chrome.tabs.executeScript(result.id, {
-                                    code: '(' + function () {
-                                        return {
-                                            price: document.querySelector('.sorting__price-wrap .price').innerHTML,
-                                        };
-                                    } + ')()'
-                                }, function (results) {
-                                    chrome.tabs.remove(currentTabId);
-                                    console.log('close the tab id=' + currentTabId);
-
-                                    // if get price
-                                    if (results != null && typeof results[0] !== 'undefined') {
-                                        console.log('Min price is ' + results[0].price);
-
-                                        flights[index].tabId = null;
-                                        flights[index].price = parseInt(results[0].price);
-                                        chrome.storage.local.set({flights: flights}, function (result) {
-                                            console.log('price and tabId updated');
-                                        });
-
-                                        // here we should open new tab!!!
-                                        // BUT FOR NEXT!!!!!
-                                        // openNewTab(item, index, flights, airportFrom, airportTo);
-
-                                    } else {
-                                        // console.log('cannot get price');
-                                    }
-                                });
-                            }
-                        }
-                    });
-                    // console.log("HERE WE UPDATED PRICE, but cannot open new tab");
-                    // console.log('is tab opened: ' + openedTab);
-                    // if(openNewTab === false) {
-                    //     return false;
-                    // }
+                return true;
+            }
+            if (parseInt(item.price) > 0 && item.tabId !== null) {
+                // flights[index].tabId = null;
+                console.log('price more than 0, but tab not null');
+                item.tabId = null;
+                updateValue(index, item);
+                return true;
+            }
+            if (item.price === null) {
+                if (maxNewTabs <= 0) {
                     return false;
-                    // return true;
+                } else {
+                    maxNewTabs--;
+                    openNewTab(item, index, airportFrom, airportTo);
                 }
-            });
-
+            }
         });
 
+        console.log('---------------------');
+
+        // processing opened tabs & parse info
+        flights.forEach(function (item, index) {
+                'use strict';
+
+
+                if (item.tabId !== null && item.price !== null) {
+                    chrome.tabs.remove(item.tabId);
+                    item.tabId = null;
+                    updateValue(index, item);
+                }
+
+                // if tab isn't empty, try to get info from it and add to var 'flight'
+                if (item.tabId !== null) {
+
+                    console.log('found that not null tabId=' + item.tabId);
+
+                    chrome.tabs.get(item.tabId, function (result) {
+                        'use strict';
+
+                        console.log('get tab info of tabId=' + item.tabId);
+
+                        // if error with tab -- clear tab info and save
+                        if (chrome.runtime.lastError) {
+                            console.log('error!!! need to remove index:' + index);
+                            console.log(chrome.runtime.lastError);
+                            item.tabId = null;
+                            updateValue(index, item);
+                        }
+                        else {
+                            console.log('tab found, checking status=' + result.status);
+
+                            // check if tab exists and complete already
+                            // if (result.status === 'complete') {
+
+                            chrome.tabs.executeScript(result.id, {
+                                code: '(' + function () {
+                                    'use strict';
+                                    return {
+                                        price: document.querySelector('.sorting__price-wrap .price').innerHTML,
+                                        // transferLong: document.querySelector('.ticket__content').querySelector(".ticket__header").querySelector('.--transfer-long').innerHTML,
+                                        // path: document.querySelector('.ticket__content').querySelector(".segment-route__path").innerHTML,
+                                    };
+                                } + ')()'
+                            }, function (results) {
+                                'use strict';
+
+                                console.log('closing tab #' + item.tabId);
+                                chrome.tabs.remove(item.tabId);
+
+                                console.log('we parsed info:');
+                                console.log(results);
+
+                                // if get price
+                                if (results !== null && typeof results[0] !== 'undefined') {
+                                    // console.log('Min price is ' + results[0].price);
+
+                                    // item.tabId = null;
+                                    item.price = results[0].price;
+                                    updateValue(index, item);
+
+                                    // update minimalPrice
+                                    chrome.storage.local.get(['minimalPrice'], function (result) {
+                                        'use strict';
+
+                                        if (results[0].price < parseInt(result.minimalPrice) || parseInt(result.minimalPrice) === 0 || result.minimalPrice === null) {
+                                            chrome.storage.local.set({minimalPrice: results[0].price}, function () {
+                                                'use strict';
+                                                console.log('minimalPrice updated');
+                                            });
+                                        } else {
+                                        }
+                                    });
+
+                                } else {
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        );
     });
+}
+
+function updateValue(index, item) {
+    let flightPrefix = 'flight_';
+    let obj = {};
+    obj[flightPrefix + index] = item;
+    chrome.storage.local.set(obj);
 }
 
 function onError() {

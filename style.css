@@ -103,7 +103,7 @@ input:checked + .slider:before {
     color: #9fcdff;
 }
 
-#buttonCron {
+#buttonCron, #buttonClear {
     cursor: pointer;
     color: #9fcdff;
 }
