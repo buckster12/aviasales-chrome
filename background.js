@@ -13,13 +13,17 @@ function parseFlight(result) {
     return flightsArray;
 }
 
-function openNewTab(item, index, airportFrom, airportTo) {
-    'use strict';
-
+function openNewTab(item, index, airportFrom, airportTo, airportFrom2 = null, airportTo2 = null) {
     let dateFrom = moment(item.start).format("DDMM");
     let dateTo = moment(item.end).format("DDMM");
 
-    var action_url = "https://www.aviasales.ru/search/" + airportFrom + dateFrom + airportTo + dateTo + "1";
+    let action_url = '';
+    if (airportFrom2 && airportTo2) {
+        action_url = "https://www.aviasales.ru/search/" + airportFrom + dateFrom + airportTo + "-" + airportFrom2 + dateTo + airportTo2 + "1";
+    } else {
+        action_url = "https://www.aviasales.ru/search/" + airportFrom + dateFrom + airportTo + dateTo + "1";
+    }
+
     chrome.tabs.create({url: action_url, active: false}, function (tab) {
         console.log('tab opened: ' + tab.id);
         item.tabId = tab.id;
@@ -40,6 +44,13 @@ function onAlarm() {
         const enabled = result.enableExtension;
         const airportFrom = result.airportFrom;
         const airportTo = result.airportTo;
+        const difficult_route = result.difficult_route;
+        const airportFrom2 = result.airportFrom2;
+        const airportTo2 = result.airportTo2;
+
+        console.log("airportFrom2=" + airportFrom2);
+        console.log("difficult_route=" + difficult_route);
+
         const flightPrefix = 'flight_';
 
         if (enabled === false) {
@@ -50,7 +61,11 @@ function onAlarm() {
         let flights = parseFlight(result);
 
         // open next flight's window
-        let maxNewTabs = 2;
+        let maxNewTabs = result.maxTabs;
+        if (parseInt(maxNewTabs) <= 0 || typeof maxNewTabs === 'undefined') {
+            maxNewTabs = 1;
+        }
+
         flights.forEach(function (item, index) {
             'use strict';
 
@@ -73,7 +88,14 @@ function onAlarm() {
                     return false;
                 } else {
                     maxNewTabs--;
-                    openNewTab(item, index, airportFrom, airportTo);
+
+                    if (difficult_route === true) {
+                        console.log("DIFFICULT ROUTE");
+                        openNewTab(item, index, airportFrom, airportTo, airportFrom2, airportTo2);
+                    } else {
+                        console.log("SIMPLE ROUTE");
+                        openNewTab(item, index, airportFrom, airportTo);
+                    }
                 }
             }
         });

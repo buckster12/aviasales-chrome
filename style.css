@@ -84,7 +84,7 @@ input:checked + .slider:before {
 }
 
 #enableExtension {
-    float:right;
+    float: right;
 }
 
 .header {
@@ -111,6 +111,7 @@ input:checked + .slider:before {
 .to {
     padding-left: 45px !important;
 }
+
 .head_strong {
     color: white;
 }
@@ -120,30 +121,51 @@ input:checked + .slider:before {
 }
 
 #airport_from {
-    background: url("img/bg.jpg") no-repeat -90px -30px;
+    background: url("img/bg.jpg") no-repeat -90px -10px;
     margin-left: -5px;
 
 }
-.form-group label{
+
+.form-group label {
     color: white;
     font-size: 18px;
     margin-bottom: 1px;
 }
 
-.to label{
+.to label {
     color: white;
     font-size: 18px;
     margin-bottom: 1px;
-    /*margin-left: 100px;*/
-    padding-left: 130px;
 }
 
+.to label:first-child {
+    /*padding-left: 20px;*/
+}
 
 select:focus {
     background-color: blue;
     color: white;
 }
 
+.secondFlightContainer {
+    display: none;
+}
+
+#difficult_route_box {
+    color: #fff;
+    /*width: auto;*/
+    /*padding: 0 5px;*/
+    /*border-radius: 4px;*/
+    /*background-color: #1b4f6a;*/
+    font-weight: bold;
+}
+
+span.labelBackground {
+    border-radius: 4px;
+    padding: 4px;
+    /*padding: 1px 1px 4px 4px;*/
+    background-color: #1b4f6a;
+}
 
 .form-group input {
     width: 150px;

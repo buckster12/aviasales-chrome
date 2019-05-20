@@ -18,10 +18,7 @@
     "*://*/*",
     "background",
     "tabs",
-//    "activeTab",
-//    "contextMenus",
     "storage",
-//    "bookmarks",
     "alarms"
   ],
   "browser_action": {
