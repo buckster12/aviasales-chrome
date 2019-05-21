@@ -45,12 +45,17 @@ $(document).ready(function () {
     chrome.storage.local.get(null, function (items) {
         $('#log').text(JSON.stringify(items));
         $('#maxTabs').val(items.maxTabs);
+
         $('#dateFrom').val(items.dateFrom);
+        $('#dateFrom').datepicker('update');
+
         $('#stayForFrom').val(items.stayForFrom);
         $('#stayForTo').val(items.stayForTo);
         $('#difficult_route').prop("checked", items.difficult_route);
 
         $('#dateTo').val(items.dateTo);
+        $('#dateTo').datepicker('update');
+
         $('#airportFrom').val(items.airportFrom);
         $('#airportFrom2').val(items.airportFrom2);
         $('#airportTo').val(items.airportTo);
