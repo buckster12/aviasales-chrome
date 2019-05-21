@@ -76,7 +76,21 @@ $(document).ready(function () {
             flightRaw.classList.add("flightRaw");
             let flightRawPrice = document.createElement("span");
             flightRawPrice.classList.add("price");
-            flightRawPrice.textContent = value.price + '(' + value.tabId + ')';
+
+            flightRawPrice.textContent = value.price;
+
+            // время в пути
+            if (value.transferLong === null || typeof value.transferLong === "undefined") {
+            } else {
+                flightRawPrice.textContent += '(' + value.transferLong + ')';
+            }
+
+            // пересадки
+            if (value.stops && typeof value.stops !== 'undefined') {
+                flightRawPrice.textContent += ' Changes: ' + value.stops;
+            }
+
+            // flightRawPrice.textContent = value.price + '(' + value.tabId + ')';
             flightRaw.textContent = value.start + " - " + value.end + " = ";
             flightRaw.appendChild(flightRawPrice);
             document.querySelector("#resultFlights").appendChild(flightRaw);

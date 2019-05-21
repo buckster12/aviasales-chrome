@@ -141,7 +141,9 @@ function onAlarm() {
                                     'use strict';
                                     return {
                                         price: document.querySelector('.sorting__price-wrap .price').innerHTML,
-                                        // transferLong: document.querySelector('.ticket__content').querySelector(".ticket__header").querySelector('.--transfer-long').innerHTML,
+                                        transferLong: document.querySelector('.ticket-desktop__content').querySelector(".segment-route__duration").innerHTML,
+                                        stops: document.querySelector('.ticket-desktop__content').querySelectorAll(".segment-route__stop").length - 2,
+                                        // transferLong: document.querySelector('.ticket-desktop__content').querySelector(".ticket-desktop__header").querySelector('.--transfer-long').innerHTML,
                                         // path: document.querySelector('.ticket__content').querySelector(".segment-route__path").innerHTML,
                                     };
                                 } + ')()'
@@ -160,6 +162,8 @@ function onAlarm() {
 
                                     // item.tabId = null;
                                     item.price = results[0].price;
+                                    item.transferLong = results[0].transferLong;
+                                    item.stops = results[0].stops;
                                     updateValue(index, item);
 
                                     // update minimalPrice

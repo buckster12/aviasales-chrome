@@ -6,6 +6,7 @@ body {
 
 #resultFlights {
     width: 450px;
+    font-size: 12px;
     height: 200px;
     background-color: #598ea0;
     border-radius: 4px;
