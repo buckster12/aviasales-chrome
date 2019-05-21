@@ -1,7 +1,6 @@
 // event: called when extension is installed or updated or Chrome is updated
-function onInstalled() {
-}
-
+// function onInstalled() {
+// }
 
 function parseFlight(result) {
     let flightsArray = [];
@@ -35,7 +34,7 @@ function openNewTab(item, index, airportFrom, airportTo, airportFrom2 = null, ai
 
 function onAlarm() {
     // default set to false, to prevent of infinity of windows
-    var enabled = false;
+    // let enabled = false;
     // var openedTab = false;
 
     // check if extension enabled
@@ -49,10 +48,9 @@ function onAlarm() {
         const airportFrom2 = result.airportFrom2;
         const airportTo2 = result.airportTo2;
 
-        console.log("airportFrom2=" + airportFrom2);
-        console.log("difficult_route=" + difficult_route);
-
-        const flightPrefix = 'flight_';
+        // console.log("airportFrom2=" + airportFrom2);
+        // console.log("difficult_route=" + difficult_route);
+        // const flightPrefix = 'flight_';
 
         if (enabled === false) {
             console.log('plugin disabled');
@@ -200,16 +198,16 @@ function updateValue(index, item) {
     chrome.storage.local.set(obj);
 }
 
-function onError() {
-    console.log('error during tab opening');
-}
+// function onError() {
+//     console.log('error during tab opening');
+// }
 
-function onCreated() {
-    console.log('tab created');
-}
+// function onCreated() {
+//     console.log('tab created');
+// }
 
-function onStartup() {
-}
+// function onStartup() {
+// }
 
 
 // listen for extension install or update
