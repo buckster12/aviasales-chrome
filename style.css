@@ -134,15 +134,9 @@ input:checked + .slider:before {
 }
 
 #airport_from {
-    background: url("img/bg.jpg");
-    background-position: -90px -10px;
-    background-repeat: no-repeat;
-    background-origin: border-box;
+    background: url("img/bg.jpg") no-repeat -90px -10px;
     background-size: cover;
-
-    /*background: url("img/bg.jpg") no-repeat -90px -10px;*/
     margin-left: -5px;
-
 }
 
 .form-group label {

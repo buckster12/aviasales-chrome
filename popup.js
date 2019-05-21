@@ -9,14 +9,14 @@ function getDates(startDate, stopDate) {
     return dateArray;
 }
 
-let bkg = chrome.extension.getBackgroundPage();
+// let bkg = chrome.extension.getBackgroundPage();
 
 function createURL(item, value) {
     if (typeof value.price === 'undefined' || value.price === null || parseInt(value.price) === 0) {
         return null;
     }
 
-    chrome.extension.getBackgroundPage().console.log(value);
+    // chrome.extension.getBackgroundPage().console.log(value);
 
     let dateFrom = moment(value.start);
     let dateFromFormatted = dateFrom.format("DDMM");
@@ -52,9 +52,6 @@ function toggleDifficultRoute() {
     if ($('#difficult_route').is(":checked")) {
         $('.secondFlightContainer').show();
     }
-    else {
-        $('.secondFlightContainer').hide();
-    }
 }
 
 $(document).ready(function () {
@@ -69,9 +66,6 @@ $(document).ready(function () {
     });
 
     difficult_route_element.on('click', toggleDifficultRoute);
-    difficult_route_element.trigger('click');
-
-    // const flightPrefix = 'flight_';
 
     // load values
     chrome.storage.local.get(null, function (items) {
@@ -83,7 +77,10 @@ $(document).ready(function () {
 
         $('#stayForFrom').val(items.stayForFrom);
         $('#stayForTo').val(items.stayForTo);
+
+        // update difficult route layers
         $('#difficult_route').prop("checked", items.difficult_route);
+        toggleDifficultRoute();
 
         dateToElement.val(items.dateTo);
         dateToElement.datepicker('update');

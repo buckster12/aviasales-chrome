@@ -143,7 +143,9 @@ function onAlarm() {
                                     return {
                                         price: document.querySelector('.sorting__price-wrap .price').innerHTML,
                                         transferLong: document.querySelector('.ticket-desktop__content').querySelector(".segment-route__duration").innerHTML,
-                                        stops: document.querySelector('.ticket-desktop__content').querySelectorAll(".segment-route__stop").length - 2,
+                                        stops: document.querySelector('.product-list > .product-list__item .ticket-segment .segment-route__path').querySelectorAll(".segment-route__stop").length,
+                                        // stops: document.querySelector('.ticket-desktop__content').querySelectorAll(".segment-route__stop").length - 2,
+
                                         // transferLong: document.querySelector('.ticket-desktop__content').querySelector(".ticket-desktop__header").querySelector('.--transfer-long').innerHTML,
                                         // path: document.querySelector('.ticket__content').querySelector(".segment-route__path").innerHTML,
                                     };
