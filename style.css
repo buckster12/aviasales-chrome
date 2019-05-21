@@ -1,11 +1,12 @@
 body {
-    width: 410px;
+    width: 510px;
     padding: 5px 5px;
     height: 420px;
 }
 
 #resultFlights {
-    width: 450px;
+    /*width: 450px;*/
+    width: 100%;
     font-size: 12px;
     height: 200px;
     background-color: #598ea0;
@@ -18,6 +19,11 @@ body {
 
 .flightRaw .price {
     font-weight: bold;
+}
+
+.flightRaw a {
+    color: #1c7430;
+    text-decoration: none;
 }
 
 .flightRaw .minimalValue {
@@ -128,7 +134,13 @@ input:checked + .slider:before {
 }
 
 #airport_from {
-    background: url("img/bg.jpg") no-repeat -90px -10px;
+    background: url("img/bg.jpg");
+    background-position: -90px -10px;
+    background-repeat: no-repeat;
+    background-origin: border-box;
+    background-size: cover;
+
+    /*background: url("img/bg.jpg") no-repeat -90px -10px;*/
     margin-left: -5px;
 
 }

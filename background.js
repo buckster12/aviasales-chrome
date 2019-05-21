@@ -2,6 +2,7 @@
 function onInstalled() {
 }
 
+
 function parseFlight(result) {
     let flightsArray = [];
     Object.keys(result).forEach(function (key) {

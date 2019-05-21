@@ -20,8 +20,7 @@
     <span id="buttonCron">[install]</span>
     <span id="buttonClear">[clear all]</span>
 
-    <!-- ADDED AGAIN -->
-    <input type="checkbox" id="enableExtension">
+    <input type="checkbox" title="Enable extension" id="enableExtension">
 
     <label class="switch float-right">
         <!-- DOESN'T WORK !!!!! -->
@@ -59,7 +58,7 @@
             </div>
             <div class="form-group secondFlightContainer">
                 <span class="labelBackground">
-                    <label for="airportFrom">Return from</label>
+                    <label for="airportFrom2">Return from</label>
                 </span>
 
                 <input type="text" list="fly_from2" id="airportFrom2" class="form-control"/>
@@ -70,9 +69,8 @@
                 </datalist>
             </div>
 
-
             <div class="form-group">
-                <input type="text" id="dateFrom" size="10" class="datepicker" value="">
+                <input type="text" title="Date from" id="dateFrom" size="10" class="datepicker" value="">
             </div>
         </div>
 
@@ -100,7 +98,7 @@
                 </datalist>
             </div>
             <div class="form-group">
-                <input type="text" id="dateTo" size="10" class="datepicker" value="">
+                <input type="text" title="Date to" id="dateTo" size="10" class="datepicker" value="">
             </div>
         </div>
     </div>
@@ -119,7 +117,7 @@
             <label>from</label>
             <input type="text" id="stayForFrom" size="4" maxlength="2" value="9">
             <label>to</label>
-            <input type="text" id="stayForTo" size="4" maxlength="2" value="14">
+            <input type="text" title="Maximum days you want to stay" id="stayForTo" size="4" maxlength="2" value="14">
             <label>days</label>
         </div>
 
@@ -142,7 +140,8 @@
 
     <div class="row">
         <div class="col-6">
-            Max tabs: <input type="text" id="maxTabs" value="2" size="2" name="maxTabs"/>
+            <label for="maxTabs">Max tabs:</label>
+            <input type="text" id="maxTabs" value="2" size="2" name="maxTabs"/>
         </div>
     </div>
 
@@ -159,7 +158,7 @@
     <br>
     <div class="row">
         <div id="resultFlights"></div>
-        <textarea name="" id="log" style="display: none" cols="47" rows="8"></textarea><br><br>
+        <textarea name="" id="log" title="This is just log of work" style="display: none" cols="47" rows="8"></textarea><br><br>
     </div>
 
 </div>

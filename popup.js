@@ -9,6 +9,34 @@ function getDates(startDate, stopDate) {
     return dateArray;
 }
 
+let bkg = chrome.extension.getBackgroundPage();
+
+function createURL(item, value) {
+    if (typeof value.price === 'undefined' || value.price === null || parseInt(value.price) === 0) {
+        return null;
+    }
+
+    chrome.extension.getBackgroundPage().console.log(value);
+
+    let dateFrom = moment(value.start);
+    let dateFromFormatted = dateFrom.format("DDMM");
+
+    let dateTo = moment(value.end);
+    let dateToFormatted = dateTo.format("DDMM");
+
+
+    let action_url = '';
+    if (item.airportFrom2 && item.airportTo2) {
+        action_url = "https://www.aviasales.ru/search/" + item.airportFrom + dateFromFormatted + item.airportTo + "-" + item.airportFrom2 + dateToFormatted + item.airportTo2 + "1";
+    } else {
+        action_url = "https://www.aviasales.ru/search/" + item.airportFrom + dateFromFormatted + item.airportTo + dateToFormatted + "1";
+    }
+    // ref link
+    action_url += "?marker=131525&language=ru";
+
+    return action_url;
+}
+
 const getRange = (start, stop) => Array.from(
     new Array((stop - start) + 1),
     (_, i) => i + start
@@ -31,30 +59,34 @@ function toggleDifficultRoute() {
 
 $(document).ready(function () {
 
+    let difficult_route_element = $('#difficult_route');
+    let dateFromElement = $('#dateFrom');
+    let dateToElement = $('#dateTo');
+
     $('.datepicker').datepicker({
         autoclose: true,
         format: "yyyy-mm-dd"
     });
 
-    $('#difficult_route').on('click', toggleDifficultRoute);
-    $('#difficult_route').trigger('click');
+    difficult_route_element.on('click', toggleDifficultRoute);
+    difficult_route_element.trigger('click');
 
-    const flightPrefix = 'flight_';
+    // const flightPrefix = 'flight_';
 
     // load values
     chrome.storage.local.get(null, function (items) {
         $('#log').text(JSON.stringify(items));
         $('#maxTabs').val(items.maxTabs);
 
-        $('#dateFrom').val(items.dateFrom);
-        $('#dateFrom').datepicker('update');
+        dateFromElement.val(items.dateFrom);
+        dateFromElement.datepicker('update');
 
         $('#stayForFrom').val(items.stayForFrom);
         $('#stayForTo').val(items.stayForTo);
         $('#difficult_route').prop("checked", items.difficult_route);
 
-        $('#dateTo').val(items.dateTo);
-        $('#dateTo').datepicker('update');
+        dateToElement.val(items.dateTo);
+        dateToElement.datepicker('update');
 
         $('#airportFrom').val(items.airportFrom);
         $('#airportFrom2').val(items.airportFrom2);
@@ -71,7 +103,7 @@ $(document).ready(function () {
             }
         });
 
-        flightsArray.forEach(function (value, index) {
+        flightsArray.forEach(function (value) {
             let flightRaw = document.createElement("div");
             flightRaw.classList.add("flightRaw");
             let flightRawPrice = document.createElement("span");
@@ -79,7 +111,7 @@ $(document).ready(function () {
 
             flightRawPrice.textContent = value.price;
 
-            if(value.price === items.minimalPrice) {
+            if (value.price === items.minimalPrice) {
                 flightRawPrice.classList.add("minimalValue");
             }
 
@@ -92,6 +124,17 @@ $(document).ready(function () {
             // пересадки
             if (value.stops && typeof value.stops !== 'undefined') {
                 flightRawPrice.textContent += ' Changes: ' + value.stops;
+            }
+
+            flightRawPrice.textContent += " ";
+
+            let link = document.createElement("a");
+            let hrefURL = createURL(items, value);
+            if (hrefURL) {
+                link.href = hrefURL;
+                link.target = "_blank";
+                link.textContent = "[URL]";
+                flightRawPrice.appendChild(link);
             }
 
             // flightRawPrice.textContent = value.price + '(' + value.tabId + ')';
@@ -128,7 +171,7 @@ $(document).ready(function () {
 
     $('#buttonClear').on('click', function () {
         chrome.storage.local.clear(function () {
-            var error = chrome.runtime.lastError;
+            const error = chrome.runtime.lastError;
             if (error) {
                 console.error(error);
             } else {
@@ -161,7 +204,7 @@ $(document).ready(function () {
         const flightPrefix = 'flight_';
 
         let dates = getDates(dateFrom, dateTo);
-        var i = 0;
+        let i = 0;
         dates.forEach(function (item) {
             stayForArray.forEach(function (stayFor) {
                 flightsObject[flightPrefix + i] = Object.assign({
