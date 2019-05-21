@@ -20,6 +20,12 @@ body {
     font-weight: bold;
 }
 
+.flightRaw .minimalValue {
+    color: #e83e8c;
+    background-color: #abdde5;
+    font-size: 14px;
+}
+
 /* The switch - the box around the slider */
 .switch {
     position: relative;

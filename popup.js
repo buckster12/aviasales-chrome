@@ -79,6 +79,10 @@ $(document).ready(function () {
 
             flightRawPrice.textContent = value.price;
 
+            if(value.price === items.minimalPrice) {
+                flightRawPrice.classList.add("minimalValue");
+            }
+
             // время в пути
             if (value.transferLong === null || typeof value.transferLong === "undefined") {
             } else {
