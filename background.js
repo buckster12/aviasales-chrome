@@ -120,12 +120,12 @@ function onAlarm() {
                     chrome.tabs.get(item.tabId, function (result) {
                         'use strict';
 
-                        console.log('get tab info of tabId=' + item.tabId);
+                        // console.log('get tab info of tabId=' + item.tabId);
 
                         // if error with tab -- clear tab info and save
                         if (chrome.runtime.lastError) {
-                            console.log('error!!! need to remove index:' + index);
-                            console.log(chrome.runtime.lastError);
+                            // console.log('error!!! need to remove index:' + index);
+                            // console.log(chrome.runtime.lastError);
                             item.tabId = null;
                             updateValue(index, item);
                         }

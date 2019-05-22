@@ -16,20 +16,21 @@ function createURL(item, value) {
         return null;
     }
 
-    // chrome.extension.getBackgroundPage().console.log(value);
-
     let dateFrom = moment(value.start);
     let dateFromFormatted = dateFrom.format("DDMM");
-
+    let one_way = item.one_way;
     let dateTo = moment(value.end);
     let dateToFormatted = dateTo.format("DDMM");
 
-
     let action_url = '';
-    if (item.airportFrom2 && item.airportTo2) {
+    if (item.airportFrom2 && item.airportTo2 && item.difficult_route) {
         action_url = "https://www.aviasales.ru/search/" + item.airportFrom + dateFromFormatted + item.airportTo + "-" + item.airportFrom2 + dateToFormatted + item.airportTo2 + "1";
     } else {
-        action_url = "https://www.aviasales.ru/search/" + item.airportFrom + dateFromFormatted + item.airportTo + dateToFormatted + "1";
+        if (item.one_way) {
+            action_url = "https://www.aviasales.ru/search/" + item.airportFrom + dateFromFormatted + item.airportTo + "1";
+        } else {
+            action_url = "https://www.aviasales.ru/search/" + item.airportFrom + dateFromFormatted + item.airportTo + dateToFormatted + "1";
+        }
     }
     // ref link
     action_url += "?marker=131525&language=ru";
@@ -211,7 +212,7 @@ $(document).ready(function () {
         const flightPrefix = 'flight_';
 
         let dates = getDates(dateFrom, dateTo);
-        
+
         let i = 0;
         dates.forEach(function (item) {
             if (one_way === true) {
