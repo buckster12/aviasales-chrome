@@ -42,6 +42,10 @@ const getRange = (start, stop) => Array.from(
     (_, i) => i + start
 );
 
+function debug(msg) {
+    chrome.extension.getBackgroundPage().console.log(msg);
+}
+
 
 function calculateNextDate(currentDate, stayFor) {
     currentDate = moment(currentDate).add(stayFor, 'days');
@@ -57,6 +61,8 @@ function toggleDifficultRoute() {
 $(document).ready(function () {
 
     let difficult_route_element = $('#difficult_route');
+    let one_way = $('#one_way');
+
     let dateFromElement = $('#dateFrom');
     let dateToElement = $('#dateTo');
 
@@ -81,6 +87,9 @@ $(document).ready(function () {
         // update difficult route layers
         $('#difficult_route').prop("checked", items.difficult_route);
         toggleDifficultRoute();
+
+        $('#one_way').prop("checked", items.one_way);
+        items.one_way ? $('#stayForContainer').hide() : null;
 
         dateToElement.val(items.dateTo);
         dateToElement.datepicker('update');
@@ -189,6 +198,7 @@ $(document).ready(function () {
         let stayForFrom = $('#stayForFrom').val();
         let stayForTo = $('#stayForTo').val();
         let difficult_route = $('#difficult_route').is(":checked");
+        let one_way = $('#one_way').is(":checked");
         let maxTabs = $('#maxTabs').val();
         let dateFrom = $('#dateFrom').val();
         let dateTo = $('#dateTo').val();
@@ -201,18 +211,32 @@ $(document).ready(function () {
         const flightPrefix = 'flight_';
 
         let dates = getDates(dateFrom, dateTo);
+        
         let i = 0;
         dates.forEach(function (item) {
-            stayForArray.forEach(function (stayFor) {
+            if (one_way === true) {
                 flightsObject[flightPrefix + i] = Object.assign({
                     start: item,
-                    end: calculateNextDate(item, stayFor),
+                    end: null,
                     price: null,
                     tabId: null
                 });
                 i++;
-            });
+            }
+            else {
+                stayForArray.forEach(function (stayFor) {
+                    flightsObject[flightPrefix + i] = Object.assign({
+                        start: item,
+                        end: calculateNextDate(item, stayFor),
+                        price: null,
+                        tabId: null
+                    });
+                    i++;
+                });
+            }
         });
+
+        // debug(flightsObject);
 
         let values = {
             stayForTo: stayForTo,
@@ -224,17 +248,29 @@ $(document).ready(function () {
             airportFrom: airportFrom,
             airportFrom2: airportFrom2,
             difficult_route: difficult_route,
+            one_way: one_way,
             maxTabs: maxTabs,
             minimalPrice: null
         };
 
         const finalValues = Object.assign(values, flightsObject);
 
-        chrome.storage.local.set(finalValues, function () {
-            $('#result').html('<span>saved</span>');
-            setTimeout(function () {
-                $('#result').find("span").fadeOut('slow')
-            }, 200);
+        // keys of flights to remove (OLD DATA)
+        let removeValues = [];
+        for (let i = 0; i <= 999; i++) {
+            removeValues.push(flightPrefix + i);
+        }
+
+        // remove old values and set new
+        chrome.storage.local.remove(removeValues, function () {
+            chrome.storage.local.set(finalValues, function () {
+                $('#result').html('<span>saved</span>');
+                setTimeout(function () {
+                    $('#result').find("span").fadeOut('slow')
+                }, 200);
+            });
         });
+
+
     });
 });

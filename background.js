@@ -15,7 +15,7 @@ function parseFlight(result) {
 
 function openNewTab(item, index, airportFrom, airportTo, airportFrom2 = null, airportTo2 = null) {
     let dateFrom = moment(item.start).format("DDMM");
-    let dateTo = moment(item.end).format("DDMM");
+    let dateTo = item.end ? moment(item.end).format("DDMM") : '';
 
     let action_url = '';
     if (airportFrom2 && airportTo2) {

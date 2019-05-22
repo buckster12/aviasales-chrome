@@ -166,10 +166,11 @@ select:focus {
 
 #difficult_route_box {
     color: #fff;
-    /*width: auto;*/
-    /*padding: 0 5px;*/
-    /*border-radius: 4px;*/
-    /*background-color: #1b4f6a;*/
+    font-weight: bold;
+}
+
+#one_way_box {
+    color: #fff;
     font-weight: bold;
 }
 
